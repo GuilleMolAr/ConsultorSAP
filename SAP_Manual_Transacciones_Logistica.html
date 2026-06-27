@@ -1,0 +1,1152 @@
+"ocasa2026"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Logistics · Manual de Transacciones</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2128;
+  --surface3: #21262d;
+  --border: #30363d;
+  --border2: #3d444d;
+  --text: #e6edf3;
+  --text2: #8d96a0;
+  --text3: #545d68;
+  --accent: #2ea043;
+  --accent-dim: #1a3a24;
+  --blue: #388bfd;
+  --blue-dim: #1a2d50;
+  --amber: #d29922;
+  --amber-dim: #3a2a10;
+  --red: #f85149;
+  --red-dim: #3a1a1a;
+  --purple: #a371f7;
+  --purple-dim: #2a1f40;
+  --teal: #39c5cf;
+  --teal-dim: #0f2d32;
+  --mono: 'IBM Plex Mono', verdana;
+  --sans: 'IBM Plex Sans', verdana;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.logo-icon {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: #fff;
+}
+.logo-sub { color: var(--text3); font-weight: 400; }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: var(--radius);
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border2);
+  background: var(--surface3); color: var(--text2);
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+.btn-primary {
+  background: var(--accent-dim); color: var(--accent);
+  border-color: rgba(46,160,67,0.4);
+}
+.btn-primary:hover { background: rgba(46,160,67,0.2); color: #3dd165; }
+.btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ── HERO ── */
+.hero {
+  padding: 3rem 2rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(46,160,67,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--accent); background: var(--accent-dim);
+  border: 1px solid rgba(46,160,67,0.3);
+  padding: 3px 10px; border-radius: 20px;
+  margin-bottom: 1rem; letter-spacing: 0.05em;
+}
+.hero h1 {
+  font-size: 28px; font-weight: 600;
+  letter-spacing: -0.02em; margin-bottom: 8px;
+  line-height: 1.2;
+}
+.hero h1 span { color: var(--accent); }
+.hero p { color: var(--text2); font-size: 14px; font-weight: 300; max-width: 600px; }
+.hero-stats {
+  display: flex; gap: 2rem; margin-top: 1.5rem;
+  padding-top: 1.5rem; border-top: 1px solid var(--border);
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat-num { font-family: var(--mono); font-size: 22px; font-weight: 600; color: var(--text); }
+.stat-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── LAYOUT ── */
+.app { display: flex; }
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  height: calc(100vh - 56px);
+  position: sticky; top: 56px;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+.sidebar-section { margin-bottom: 1.5rem; }
+.sidebar-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 0 1rem; margin-bottom: 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 1rem; font-size: 13px; color: var(--text2);
+  cursor: pointer; transition: all 0.12s;
+  border-left: 2px solid transparent;
+  user-select: none;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.nav-count {
+  margin-left: auto; font-family: var(--mono); font-size: 11px;
+  color: var(--text3); background: var(--surface3);
+  padding: 1px 6px; border-radius: 10px;
+}
+
+/* ── MAIN ── */
+.main { flex: 1; min-width: 0; padding: 1.5rem 2rem; }
+
+/* ── SEARCH BAR ── */
+.search-bar {
+  display: flex; gap: 10px; margin-bottom: 1.25rem; align-items: center; flex-wrap: wrap;
+}
+.search-wrap { flex: 1; min-width: 240px; position: relative; }
+.search-wrap svg {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text3); pointer-events: none; width: 15px; height: 15px;
+}
+#searchInput {
+  width: 100%; padding: 9px 12px 9px 38px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius); color: var(--text); font-family: var(--sans); font-size: 13px;
+  transition: border-color 0.15s;
+  outline: none;
+}
+#searchInput::placeholder { color: var(--text3); }
+#searchInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,160,67,0.12); }
+
+/* ── FILTER CHIPS ── */
+.chips-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border2);
+  background: transparent; color: var(--text3);
+  transition: all 0.12s; font-family: var(--sans);
+}
+.chip:hover { color: var(--text2); border-color: var(--border2); background: var(--surface2); }
+.chip.on { color: var(--text); }
+.chip.on.wm    { background: var(--teal-dim);   border-color: rgba(57,197,207,0.4);   color: var(--teal); }
+.chip.on.mm    { background: var(--amber-dim);  border-color: rgba(210,153,34,0.4);   color: var(--amber); }
+.chip.on.sd    { background: var(--purple-dim); border-color: rgba(163,113,247,0.4);  color: var(--purple); }
+.chip.on.le    { background: var(--blue-dim);   border-color: rgba(56,139,253,0.4);   color: var(--blue); }
+.chip.on.all   { background: var(--surface3);   border-color: var(--border2);         color: var(--text); }
+.chip.on.tipo  { background: var(--accent-dim); border-color: rgba(46,160,67,0.4);    color: var(--accent); }
+.chip-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.stats-info { font-size: 12px; color: var(--text3); font-family: var(--mono); }
+.stats-info strong { color: var(--text2); }
+
+/* ── TABLE ── */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--surface2); }
+th {
+  padding: 10px 14px; text-align: left;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+  cursor: pointer; user-select: none;
+}
+th:hover { color: var(--text2); }
+th.sorted { color: var(--accent); }
+th .si { margin-left: 4px; opacity: 0.5; }
+th.sorted .si { opacity: 1; }
+td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  vertical-align: top; color: var(--text); font-size: 13px;
+}
+tr:last-child td { border-bottom: none; }
+tr.data-row { cursor: pointer; transition: background 0.1s; }
+tr.data-row:hover td { background: var(--surface2); }
+tr.data-row.expanded td { background: var(--surface2); }
+
+.code-pill {
+  display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 600;
+  padding: 3px 9px; border-radius: 5px;
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--text); white-space: nowrap; letter-spacing: 0.03em;
+}
+.code-pill.custom { border-color: rgba(46,160,67,0.5); color: var(--accent); background: var(--accent-dim); }
+
+.mod-badge {
+  display: inline-block; font-family: var(--mono); font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+}
+.mod-WM   { background: var(--teal-dim);   color: var(--teal); }
+.mod-MM   { background: var(--amber-dim);  color: var(--amber); }
+.mod-SD   { background: var(--purple-dim); color: var(--purple); }
+.mod-LE   { background: var(--blue-dim);   color: var(--blue); }
+.mod-MIX  { background: var(--surface3);   color: var(--text2); }
+
+.tipo-badge {
+  display: inline-block; font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+}
+.tipo-Ejecución    { background: rgba(46,160,67,0.12);  color: #3dd165; }
+.tipo-Consulta     { background: rgba(56,139,253,0.12); color: #79b8ff; }
+.tipo-Reporte      { background: rgba(163,113,247,0.12);color: #c9a3ff; }
+.tipo-Monitor      { background: rgba(210,153,34,0.12); color: #f0b429; }
+.tipo-Inventario   { background: rgba(57,197,207,0.12); color: #39c5cf; }
+.tipo-Confirmación { background: rgba(248,81,73,0.15);  color: #ff7b72; }
+.tipo-MasterData   { background: rgba(210,153,34,0.12); color: #f0b429; }
+.tipo-Config       { background: rgba(141,150,160,0.12);color: #8d96a0; }
+.tipo-Custom       { background: var(--accent-dim); color: var(--accent); }
+
+.expand-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--text3); width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; transition: all 0.15s; flex-shrink: 0;
+}
+.expand-btn:hover { background: var(--surface3); color: var(--text2); }
+.expand-btn svg { width: 14px; height: 14px; transition: transform 0.2s; }
+.expand-btn.open svg { transform: rotate(90deg); }
+
+.detail-row td {
+  padding: 0; border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.detail-inner {
+  padding: 1rem 1rem 1rem 3.5rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  border-left: 3px solid var(--accent);
+  margin-left: 14px;
+}
+.detail-block { display: flex; flex-direction: column; gap: 4px; }
+.detail-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.detail-text { font-size: 13px; color: var(--text2); line-height: 1.55; }
+.detail-actions { grid-column: 1/-1; display: flex; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+
+mark { background: rgba(210,153,34,0.25); color: var(--amber); border-radius: 3px; padding: 0 2px; }
+
+/* ── SECTION GROUP HEADER ── */
+.group-row td {
+  padding: 8px 14px 6px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em;
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 4rem 1rem; color: var(--text3);
+}
+.empty-state svg { width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.4; }
+.empty-state p { font-size: 14px; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7); z-index: 200;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  width: 540px; max-width: 95vw;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.modal-header h2 { font-size: 16px; font-weight: 600; }
+.modal-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--text3); width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; transition: all 0.15s;
+}
+.modal-close:hover { background: var(--surface3); color: var(--text); }
+.modal-close svg { width: 16px; height: 16px; }
+.form-group { margin-bottom: 1rem; }
+.form-label {
+  display: block; font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 8px 12px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); color: var(--text);
+  font-family: var(--sans); font-size: 13px;
+  outline: none; transition: border-color 0.15s;
+}
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,160,67,0.12);
+}
+.form-select option { background: var(--surface2); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300;
+  background: var(--surface); border: 1px solid var(--accent);
+  border-radius: var(--radius); padding: 10px 16px;
+  font-size: 13px; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  transform: translateY(20px); opacity: 0;
+  transition: all 0.25s;
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+/* ── LOGIN ── */
+.login-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: radial-gradient(circle at 30% 20%, rgba(46,160,67,0.07) 0%, transparent 55%), var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.login-overlay.hidden { display: none; }
+.login-card {
+  width: 380px; max-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.login-logo {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem;
+}
+.login-logo .logo-icon { width: 32px; height: 32px; font-size: 16px; }
+.login-logo span { font-family: var(--mono); font-size: 14px; font-weight: 600; }
+.login-card h2 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+.login-card > p.login-sub { color: var(--text2); font-size: 13px; font-weight: 300; margin-bottom: 1.5rem; }
+.login-input-wrap { position: relative; margin-bottom: 0.75rem; }
+.login-input-wrap svg {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text3); width: 15px; height: 15px; pointer-events: none;
+}
+#loginPassword {
+  width: 100%; padding: 10px 12px 10px 38px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); color: var(--text);
+  font-family: var(--sans); font-size: 13px; outline: none;
+  transition: border-color 0.15s;
+}
+#loginPassword:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,160,67,0.12); }
+.login-error {
+  display: none; align-items: center; gap: 6px;
+  color: var(--red); font-size: 12px; margin-bottom: 0.75rem;
+}
+.login-error.show { display: flex; }
+.login-error svg { width: 13px; height: 13px; flex-shrink: 0; }
+.login-btn { width: 100%; justify-content: center; padding: 9px 14px; }
+.login-foot {
+  margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--text3); line-height: 1.5;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+  .hero-stats { gap: 1rem; flex-wrap: wrap; }
+  .detail-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">S</div>
+      <span>SAP Logistics</span>
+    </div>
+    <h2>Acceso al manual</h2>
+    <p class="login-sub">Ingresá la contraseña para ver las transacciones.</p>
+    <div class="login-error" id="loginError">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6.5"/><line x1="8" y1="5" x2="8" y2="9"/><line x1="8" y1="11" x2="8" y2="11"/></svg>
+      <span>Contraseña incorrecta. Intentá de nuevo.</span>
+    </div>
+    <div class="login-input-wrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5.5 7V4.5a2.5 2.5 0 0 1 5 0V7"/></svg>
+      <input type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary login-btn" id="loginSubmit">Ingresar</button>
+    <div class="login-foot">Herramienta interna de referencia de transacciones SAP. Si no tenés la contraseña, consultá con quien te compartió este enlace.</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-icon">S</div>
+    <span>SAP Logistics</span>
+    <span class="logo-sub">/ transacciones</span>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-primary" id="openAddModal">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+      Nueva transacción
+    </button>
+    <button class="btn" id="exportBtn">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>
+      Exportar JSON
+    </button>
+    <button class="btn" id="logoutBtn" title="Cerrar sesión">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3"/><path d="M11 11l3-3-3-3"/><path d="M14 8H6"/></svg>
+      Salir
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">
+    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="8"/></svg>
+    v2.0 · 2026
+  </div>
+  <h1>Manual de <span>Transacciones</span><br>para Logística SAP</h1>
+  <p>Referencia completa de transacciones para almacenamiento, inventario, recepción, despacho, transporte, ventas y compras. Buscá, filtrá y agregá tus propias transacciones.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num" id="statTotal">0</span><span class="stat-lbl">Transacciones</span></div>
+    <div class="stat"><span class="stat-num" id="statCustom">0</span><span class="stat-lbl">Personalizadas</span></div>
+    <div class="stat"><span class="stat-num">4</span><span class="stat-lbl">Módulos</span></div>
+    <div class="stat"><span class="stat-num">7</span><span class="stat-lbl">Secciones</span></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Módulo</div>
+      <div class="nav-item active" data-mod="ALL" onclick="setMod('ALL',this)">
+        <span class="nav-dot" style="background:#545d68"></span> Todos
+        <span class="nav-count" id="nc-ALL">0</span>
+      </div>
+      <div class="nav-item" data-mod="WM" onclick="setMod('WM',this)">
+        <span class="nav-dot" style="background:#39c5cf"></span> WM — Almacén
+        <span class="nav-count" id="nc-WM">0</span>
+      </div>
+      <div class="nav-item" data-mod="MM" onclick="setMod('MM',this)">
+        <span class="nav-dot" style="background:#d29922"></span> MM — Materiales
+        <span class="nav-count" id="nc-MM">0</span>
+      </div>
+      <div class="nav-item" data-mod="SD" onclick="setMod('SD',this)">
+        <span class="nav-dot" style="background:#a371f7"></span> SD — Ventas
+        <span class="nav-count" id="nc-SD">0</span>
+      </div>
+      <div class="nav-item" data-mod="LE" onclick="setMod('LE',this)">
+        <span class="nav-dot" style="background:#388bfd"></span> LE — Logística
+        <span class="nav-count" id="nc-LE">0</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Sección</div>
+      <div class="nav-item" data-sec="Almacén (WM)" onclick="setSec('Almacén (WM)',this)">
+        <span class="nav-dot" style="background:#39c5cf"></span> Almacén
+      </div>
+      <div class="nav-item" data-sec="Inventario Físico" onclick="setSec('Inventario Físico',this)">
+        <span class="nav-dot" style="background:#39c5cf"></span> Inventario Físico
+      </div>
+      <div class="nav-item" data-sec="Recepción (Inbound)" onclick="setSec('Recepción (Inbound)',this)">
+        <span class="nav-dot" style="background:#d29922"></span> Inbound
+      </div>
+      <div class="nav-item" data-sec="Despacho / Outbound" onclick="setSec('Despacho / Outbound',this)">
+        <span class="nav-dot" style="background:#388bfd"></span> Outbound
+      </div>
+      <div class="nav-item" data-sec="Pedidos (SD)" onclick="setSec('Pedidos (SD)',this)">
+        <span class="nav-dot" style="background:#a371f7"></span> Pedidos
+      </div>
+      <div class="nav-item" data-sec="Compras (MM)" onclick="setSec('Compras (MM)',this)">
+        <span class="nav-dot" style="background:#d29922"></span> Compras
+      </div>
+      <div class="nav-item" data-sec="Datos Maestros" onclick="setSec('Datos Maestros',this)">
+        <span class="nav-dot" style="background:#a371f7"></span> Maestros
+      </div>
+      <div class="nav-item" data-sec="Mis Transacciones" onclick="setSec('Mis Transacciones',this)">
+        <span class="nav-dot" style="background:#2ea043"></span> Mis Transacciones
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tipo</div>
+      <div class="nav-item" data-tipo="Ejecución" onclick="setTipo('Ejecución',this)">
+        <span class="nav-dot" style="background:#3dd165"></span> Ejecución
+      </div>
+      <div class="nav-item" data-tipo="Consulta" onclick="setTipo('Consulta',this)">
+        <span class="nav-dot" style="background:#79b8ff"></span> Consulta
+      </div>
+      <div class="nav-item" data-tipo="Reporte" onclick="setTipo('Reporte',this)">
+        <span class="nav-dot" style="background:#c9a3ff"></span> Reporte
+      </div>
+      <div class="nav-item" data-tipo="Monitor" onclick="setTipo('Monitor',this)">
+        <span class="nav-dot" style="background:#f0b429"></span> Monitor
+      </div>
+      <div class="nav-item" data-tipo="Inventario" onclick="setTipo('Inventario',this)">
+        <span class="nav-dot" style="background:#39c5cf"></span> Inventario
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar por código, nombre, propósito, uso...">
+      </div>
+      <button class="btn" id="clearFilters">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+        Limpiar filtros
+      </button>
+    </div>
+
+    <!-- CHIPS -->
+    <div class="chips-row" id="chipsRow"></div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stats-info">
+        Mostrando <strong id="countShown">0</strong> de <strong id="countTotal">0</strong> transacciones
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:32px"></th>
+            <th data-col="code">Código <span class="si">↕</span></th>
+            <th data-col="nombre">Nombre <span class="si">↕</span></th>
+            <th data-col="modulo">Módulo <span class="si">↕</span></th>
+            <th data-col="seccion">Sección <span class="si">↕</span></th>
+            <th data-col="tipo">Tipo <span class="si">↕</span></th>
+            <th style="width:40px"></th>
+          </tr>
+        </thead>
+        <tbody id="txBody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: NUEVA TRANSACCIÓN -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Nueva transacción personalizada</h2>
+      <button class="modal-close" id="closeModal">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+      </button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Código *</label>
+        <input type="text" class="form-input" id="f-code" placeholder="Ej: ZL01, Y_MM_01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Módulo *</label>
+        <select class="form-select" id="f-modulo">
+          <option value="WM">WM</option>
+          <option value="MM">MM</option>
+          <option value="SD">SD</option>
+          <option value="LE">LE</option>
+          <option value="MIX">Mixto / Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nombre *</label>
+      <input type="text" class="form-input" id="f-nombre" placeholder="Nombre descriptivo de la transacción">
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select class="form-select" id="f-tipo">
+          <option>Ejecución</option>
+          <option>Consulta</option>
+          <option>Reporte</option>
+          <option>Monitor</option>
+          <option>Inventario</option>
+          <option>Confirmación</option>
+          <option>Master Data</option>
+          <option>Config.</option>
+          <option>Personalizada</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sección</label>
+        <select class="form-select" id="f-seccion">
+          <option>Almacén (WM)</option>
+          <option>Inventario Físico</option>
+          <option>Recepción (Inbound)</option>
+          <option>Despacho / Outbound</option>
+          <option>Pedidos (SD)</option>
+          <option>Compras (MM)</option>
+          <option>Datos Maestros</option>
+          <option>Mis Transacciones</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Propósito</label>
+      <textarea class="form-textarea" id="f-proposito" placeholder="¿Para qué sirve esta transacción?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Cuándo usarla</label>
+      <textarea class="form-textarea" id="f-uso" placeholder="¿En qué situaciones se utiliza?"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="cancelModal">Cancelar</button>
+      <button class="btn btn-primary" id="saveModal">Guardar transacción</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,8 6,12 14,4"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   CONFIGURACIÓN DE ACCESO (login simple)
+   ────────────────────────────────────────────────────────────────
+   - La contraseña NO se guarda en texto plano: se compara el hash
+     SHA-256 de lo que escribe el usuario contra PASSWORD_HASH.
+   - Contraseña actual por defecto: "ocasa2026"  →  CAMBIALA antes
+     de publicar la herramienta.
+   - Para generar el hash de una contraseña nueva, abrí la consola
+     del navegador (F12) en cualquier página y ejecutá:
+
+       crypto.subtle.digest('SHA-256', new TextEncoder().encode('TU_NUEVA_CONTRASEÑA'))
+         .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+
+     Copiá el resultado (64 caracteres) y pegalo abajo en PASSWORD_HASH.
+   - Importante: esto es una traba simple para que no entre cualquiera
+     desde el link público, NO es seguridad real. El HTML/JS es visible
+     para cualquiera que abra las herramientas de desarrollador del
+     navegador, así que no la uses para datos confidenciales o críticos.
+   ════════════════════════════════════════════════════════════════ */
+const PASSWORD_HASH = "bbb0aa5f84c044a8ab22875b40ee74a1c0068b3569b3f163b1e3a2d4e88232a2"; // "ocasa2026"
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+const loginOverlay = document.getElementById('loginOverlay');
+const loginPassword = document.getElementById('loginPassword');
+const loginError = document.getElementById('loginError');
+
+function unlockApp() {
+  loginOverlay.classList.add('hidden');
+}
+
+if (sessionStorage.getItem('sap_auth') === '1') {
+  unlockApp();
+}
+
+async function tryLogin() {
+  const val = loginPassword.value;
+  if (!val) return;
+  let hash;
+  try {
+    hash = await sha256Hex(val);
+  } catch (e) {
+    loginError.querySelector('span').textContent = 'Este navegador no soporta el chequeo seguro de contraseña (probá sobre HTTPS).';
+    loginError.classList.add('show');
+    return;
+  }
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('sap_auth', '1');
+    loginError.classList.remove('show');
+    unlockApp();
+  } else {
+    loginError.querySelector('span').textContent = 'Contraseña incorrecta. Intentá de nuevo.';
+    loginError.classList.add('show');
+    loginPassword.value = '';
+    loginPassword.focus();
+  }
+}
+
+document.getElementById('loginSubmit').addEventListener('click', tryLogin);
+loginPassword.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem('sap_auth');
+  location.reload();
+});
+
+// ── DATOS BASE ────────────────────────────────────────────────────
+const BASE_DATA = [
+
+  {code:"LT01",nombre:"Crear Orden de Transferencia (manual)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Generar órdenes de transferencia manualmente para mover stock entre ubicaciones del almacén.",uso:"Cuando se necesita reubicar mercancía, preparar un picking manual o corregir posiciones sin origen logístico.",custom:false},
+  {code:"LT0A",nombre:"Crear OT para Entrega",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Genera orden de transferencia automáticamente a partir de una entrega de salida (Delivery).",uso:"Usada por el equipo de almacén para iniciar el picking vinculado a un pedido de cliente.",custom:false},
+  {code:"LT04",nombre:"Crear OT desde Necesidad de Traslado",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Convierte una Necesidad de Traslado (TR) en una Orden de Transferencia ejecutable en el almacén.",uso:"Cuando el movimiento de stock se planificó previamente como TR (p.ej. por MRP o reposición) y debe ejecutarse físicamente.",custom:false},
+  {code:"LT06",nombre:"Crear OT para Documento de Material",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Genera una OT a partir de un documento de material ya contabilizado en MM (p.ej. un movimiento 101 pendiente de ubicar).",uso:"Cuando la entrada de mercancía ya se contabilizó en MM pero todavía falta el paso físico de guardar/ubicar en el almacén.",custom:false},
+  {code:"LT1A",nombre:"Confirmar Orden de Transferencia",modulo:"WM",seccion:"Almacén (WM)",tipo:"Confirmación",proposito:"Confirma que el movimiento físico fue ejecutado; actualiza el stock de la ubicación origen y destino.",uso:"Obligatoria tras ejecutar físicamente el picking o movimiento; cierra el ciclo logístico de la OT.",custom:false},
+  {code:"LT11",nombre:"Confirmar Posición de OT (individual)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Confirmación",proposito:"Confirma una única posición de una OT desde una pantalla simplificada, ítem por ítem.",uso:"Operarios que confirman manualmente movimiento por movimiento, sin pasar por la pantalla completa de la OT.",custom:false},
+  {code:"LT12",nombre:"Confirmar OT Colectiva / en Background",modulo:"WM",seccion:"Almacén (WM)",tipo:"Confirmación",proposito:"Procesa la confirmación de múltiples OTs en bloque, incluso en modo background.",uso:"Cierres masivos de turno o de jornada cuando hay gran volumen de OTs pendientes de confirmar.",custom:false},
+  {code:"LT15",nombre:"Anular Orden de Transferencia",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Cancela una OT que todavía no fue confirmada, revirtiendo la reserva de movimiento.",uso:"Cuando se generó una OT por error o las condiciones cambiaron antes de ejecutar el movimiento físico.",custom:false},
+  {code:"LT21",nombre:"Visualizar Orden de Transferencia",modulo:"WM",seccion:"Almacén (WM)",tipo:"Consulta",proposito:"Consulta el detalle de una OT: posiciones, cantidades, ubicaciones, estado.",uso:"Supervisión, auditoría y resolución de incidencias.",custom:false},
+  {code:"LT22",nombre:"Visualizar OT por Almacén / Tipo de Almacén",modulo:"WM",seccion:"Almacén (WM)",tipo:"Consulta",proposito:"Muestra las OTs abiertas o procesadas filtrando por número de almacén y tipo de almacén.",uso:"Control operativo diario para ver la carga de trabajo pendiente en cada zona del depósito.",custom:false},
+  {code:"LT23",nombre:"Listado de Órdenes de Transferencia por Número",modulo:"WM",seccion:"Almacén (WM)",tipo:"Reporte",proposito:"Reporte de OTs filtrable por rango de números, fechas y estado de confirmación.",uso:"Seguimiento histórico y reconciliación de movimientos de almacén.",custom:false},
+  {code:"LL01",nombre:"Monitor de Actividad del Almacén",modulo:"WM",seccion:"Almacén (WM)",tipo:"Monitor",proposito:"Panel centralizado que muestra objetos críticos del almacén: OTs vencidas, sin confirmar, TRs abiertas, colas de trabajo.",uso:"Herramienta principal del supervisor de almacén para detectar cuellos de botella en tiempo real.",custom:false},
+  {code:"LB01",nombre:"Crear Necesidad de Traslado (TR)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Registra manualmente una necesidad de traslado de stock entre ubicaciones o tipos de almacén.",uso:"Planificación previa de un movimiento que todavía no se va a ejecutar físicamente.",custom:false},
+  {code:"LB02",nombre:"Modificar Necesidad de Traslado",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Permite editar una TR existente antes de convertirla en OT.",uso:"Ajustes de cantidad, ubicación o prioridad antes de liberar el movimiento al almacén.",custom:false},
+  {code:"LB03",nombre:"Visualizar Necesidad de Traslado",modulo:"WM",seccion:"Almacén (WM)",tipo:"Consulta",proposito:"Consulta de solo lectura de una TR: datos, estado y origen.",uso:"Verificación rápida antes de convertir la TR en orden de transferencia.",custom:false},
+  {code:"LB10",nombre:"Listado de TR por Tipo de Almacén",modulo:"WM",seccion:"Almacén (WM)",tipo:"Reporte",proposito:"Reporte de necesidades de traslado abiertas, agrupadas por tipo de almacén.",uso:"Planificación diaria de tareas pendientes de conversión a OT.",custom:false},
+  {code:"LS01N",nombre:"Crear Ubicación de Almacén (Bin)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Master Data",proposito:"Crea una nueva ubicación física (bin) dentro de un tipo de almacén.",uso:"Alta de nuevas posiciones de picking o estanterías al ampliar o reorganizar el layout del depósito.",custom:false},
+  {code:"LS02N",nombre:"Modificar Ubicación de Almacén",modulo:"WM",seccion:"Almacén (WM)",tipo:"Master Data",proposito:"Edita los datos de una ubicación existente: capacidad, tipo de unidad de almacenamiento, bloqueos.",uso:"Reorganización de slotting o bloqueo temporal de una posición por mantenimiento.",custom:false},
+  {code:"LS03N",nombre:"Visualizar Ubicación de Almacén",modulo:"WM",seccion:"Almacén (WM)",tipo:"Consulta",proposito:"Consulta de solo lectura de los datos maestros de una ubicación.",uso:"Verificación de capacidad y restricciones antes de asignar stock a una posición.",custom:false},
+  {code:"LS33",nombre:"Visualizar Unidad de Almacenamiento",modulo:"WM",seccion:"Almacén (WM)",tipo:"Consulta",proposito:"Muestra el contenido y estado de una Unidad de Almacenamiento (pallet/HU gestionado por WM).",uso:"Trazabilidad de pallets paletizados bajo gestión de Storage Unit Management.",custom:false},
+  {code:"LX01",nombre:"Listado de Ubicaciones Vacías",modulo:"WM",seccion:"Almacén (WM)",tipo:"Reporte",proposito:"Genera la lista de bins vacíos disponibles por tipo de almacén.",uso:"Planeación de slotting, recepción de mercancía nueva o reorganización de espacio.",custom:false},
+  {code:"LX03",nombre:"Informe de Estado de Ubicaciones (Bin Status)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Reporte",proposito:"Reporte detallado de ocupación, capacidad y stock de cada ubicación del almacén.",uso:"Análisis de ocupación, control de capacidad y base para reportes de estado del depósito.",custom:false},
+  {code:"HU02",nombre:"Crear / Modificar Unidad de Manejo (HU)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Ejecución",proposito:"Permite crear o editar una Handling Unit: empaque, contenido y datos de identificación.",uso:"Armado de pallets/bultos mixtos, correcciones de empaque antes del despacho.",custom:false},
+  {code:"HU03",nombre:"Visualizar Unidad de Manejo (HU)",modulo:"WM",seccion:"Almacén (WM)",tipo:"Consulta",proposito:"Consulta de solo lectura del contenido y estado de una HU.",uso:"Trazabilidad de bultos, verificación de contenido ante reclamos o auditorías.",custom:false},
+  {code:"HUMO",nombre:"Monitor de Unidades de Manejo",modulo:"WM",seccion:"Almacén (WM)",tipo:"Monitor",proposito:"Pantalla de monitoreo de HUs por documento, almacén o estado.",uso:"Seguimiento operativo de pallets/bultos en tránsito dentro del proceso logístico.",custom:false},
+  {code:"LT41",nombre:"Crear OT para Inventario",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Genera órdenes de transferencia para ajustes de inventario físico dentro del almacén.",uso:"Durante procesos de conteo cíclico o inventario anual.",custom:false},
+  {code:"LI01N",nombre:"Crear Documento de Inventario (WM)",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Crea el documento formal de inventario físico para una o varias ubicaciones de almacén.",uso:"Al iniciar el recuento periódico o cíclico; paso previo al conteo físico.",custom:false},
+  {code:"LI02N",nombre:"Modificar Documento de Inventario (WM)",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Permite ajustar el documento de inventario antes o durante el conteo: bloqueo de posiciones, congelado de stock.",uso:"Correcciones administrativas del documento mientras el conteo está en curso.",custom:false},
+  {code:"LI04",nombre:"Imprimir Hoja de Conteo de Inventario",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Imprime la hoja de conteo para que el equipo registre físicamente las unidades.",uso:"Distribución al personal antes del recuento físico.",custom:false},
+  {code:"LI11N",nombre:"Introducir Resultado de Conteo (WM)",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Registra en el sistema las cantidades contadas físicamente por el equipo de almacén.",uso:"Inmediatamente después de realizar el conteo físico en piso.",custom:false},
+  {code:"LI20",nombre:"Compensar Diferencias de Inventario (WM)",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Compara conteo físico vs. stock en sistema y muestra diferencias por ubicación.",uso:"Análisis post-conteo para identificar ajustes necesarios.",custom:false},
+  {code:"LX16",nombre:"Inventario Cíclico Continuo",modulo:"WM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Ejecuta el método de inventario cíclico continuo según la frecuencia configurada por tipo de almacén.",uso:"Programas de conteo cíclico permanente en lugar de inventario anual masivo.",custom:false},
+  {code:"LX17",nombre:"Listado de Diferencias por Tipo de Almacén",modulo:"WM",seccion:"Inventario Físico",tipo:"Reporte",proposito:"Reporte consolidado de diferencias de inventario agrupadas por tipo de almacén.",uso:"Seguimiento gerencial de la exactitud de inventario (inventory accuracy) por zona.",custom:false},
+  {code:"MI01",nombre:"Crear Documento de Inventario Físico (MM)",modulo:"MM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Crea el documento de inventario a nivel de gestión de materiales, sin pasar por WM.",uso:"Centros o almacenes simples que no usan WM; inicio del proceso de conteo físico contable.",custom:false},
+  {code:"MI02",nombre:"Modificar Documento de Inventario (MM)",modulo:"MM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Permite cambiar el documento de inventario MM: bloqueo de movimientos, congelado de saldo contable.",uso:"Ajustes administrativos antes o durante el conteo.",custom:false},
+  {code:"MI04",nombre:"Introducir Conteo de Inventario (MM)",modulo:"MM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Registra la cantidad contada físicamente para cada material del documento de inventario.",uso:"Después del conteo físico, para volcar los resultados al sistema.",custom:false},
+  {code:"MI07",nombre:"Contabilizar Diferencias de Inventario (MM)",modulo:"MM",seccion:"Inventario Físico",tipo:"Inventario",proposito:"Contabiliza las diferencias entre el conteo físico y el stock en sistema, generando el ajuste contable.",uso:"Cierre del proceso de inventario físico; actualiza stock y valores contables.",custom:false},
+  {code:"MI20",nombre:"Imprimir Lista de Diferencias (MM)",modulo:"MM",seccion:"Inventario Físico",tipo:"Reporte",proposito:"Imprime el listado de diferencias detectadas tras el conteo, antes o después de contabilizarlas.",uso:"Documentación de respaldo para auditoría interna o externa del proceso de inventario.",custom:false},
+  {code:"MIGO",nombre:"Registro de Movimientos de Mercancías",modulo:"MM",seccion:"Recepción (Inbound)",tipo:"Ejecución",proposito:"Transacción principal para registrar entradas, salidas y traslados de mercancía en MM.",uso:"Recepción contra OC (mov.101), devoluciones (122), traslados internos (311/312) e inventarios.",custom:false},
+  {code:"VL31N",nombre:"Crear Entrega Entrante",modulo:"LE",seccion:"Recepción (Inbound)",tipo:"Ejecución",proposito:"Crea una entrega de entrada (Inbound Delivery) a partir de una orden de compra o aviso de expedición del proveedor.",uso:"Cuando se anticipa la llegada de mercancía y se quiere planificar la recepción antes de que el camión llegue.",custom:false},
+  {code:"VL32N",nombre:"Modificar Entrega Entrante",modulo:"LE",seccion:"Recepción (Inbound)",tipo:"Ejecución",proposito:"Edita una entrega de entrada existente: cantidades, lotes, fechas.",uso:"Cuando se recibe una cantidad diferente a la pedida o se requiere ajustar datos antes del posting.",custom:false},
+  {code:"VL33N",nombre:"Visualizar Entrega Entrante",modulo:"LE",seccion:"Recepción (Inbound)",tipo:"Consulta",proposito:"Consulta de solo lectura de la entrega de entrada: posiciones, cantidades, estado WM.",uso:"Trazabilidad, auditoría y resolución de discrepancias de recepción.",custom:false},
+  {code:"VL60",nombre:"Monitor Extendido de Entregas Entrantes",modulo:"LE",seccion:"Recepción (Inbound)",tipo:"Monitor",proposito:"Pantalla de trabajo avanzada para visualizar y gestionar todas las entregas entrantes pendientes.",uso:"Gestión diaria del área de recepción; filtrable por fecha, proveedor, material.",custom:false},
+  {code:"VL06I",nombre:"Monitor de Entregas Entrantes (clásico)",modulo:"LE",seccion:"Recepción (Inbound)",tipo:"Monitor",proposito:"Versión estándar y más simple del monitor de entregas entrantes, con accesos directos a putaway y GR.",uso:"Alternativa rápida a VL60 para equipos que prefieren la vista clásica de monitoreo de inbound.",custom:false},
+  {code:"MB1C",nombre:"Entrada de Mercancías - Otros Movimientos",modulo:"MM",seccion:"Recepción (Inbound)",tipo:"Ejecución",proposito:"Registra entradas de mercancía sin referencia a una OC (ajustes iniciales, hallazgos, devoluciones especiales).",uso:"Altas de stock que no provienen de un proceso de compra estándar.",custom:false},
+  {code:"MBST",nombre:"Anular Documento de Material",modulo:"MM",seccion:"Recepción (Inbound)",tipo:"Ejecución",proposito:"Revierte un documento de material contabilizado por error (entrada, salida o traslado).",uso:"Corrección de errores de registro en MIGO/MB1x antes de que se propaguen a otros procesos.",custom:false},
+  {code:"MB51",nombre:"Listado de Movimientos de Mercancías",modulo:"MM",seccion:"Recepción (Inbound)",tipo:"Reporte",proposito:"Reporte de todos los movimientos de stock por material, planta, almacén y período.",uso:"Auditoría de entradas/salidas, conciliación con proveedor, análisis de consumos.",custom:false},
+  {code:"MB52",nombre:"Stocks de Almacén (MM)",modulo:"MM",seccion:"Recepción (Inbound)",tipo:"Reporte",proposito:"Reporte de stocks disponibles a nivel MM por material, planta y almacén.",uso:"Control de inventarios a nivel de gestión de materiales.",custom:false},
+  {code:"VL01N",nombre:"Crear Entrega de Salida",modulo:"SD",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Crea una entrega de salida (Outbound Delivery) a partir de un pedido de cliente.",uso:"Paso inicial del proceso de despacho; activa las funciones de picking y expedición.",custom:false},
+  {code:"VL02N",nombre:"Modificar Entrega de Salida",modulo:"SD",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Permite editar una entrega existente: cambiar cantidades, lotes, rutas o datos de transporte.",uso:"Ajustes previos a la salida de mercancía; registro del picking real y ejecución de PGI.",custom:false},
+  {code:"VL03N",nombre:"Visualizar Entrega de Salida",modulo:"SD",seccion:"Despacho / Outbound",tipo:"Consulta",proposito:"Consulta de solo lectura de la entrega de salida: estado, posiciones, cantidades y documentos asociados.",uso:"Trazabilidad, resolución de discrepancias y auditoría.",custom:false},
+  {code:"VL04",nombre:"Tratamiento de Lista de Entregas Pendientes",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Procesa de forma colectiva los pedidos vencidos para entrega, generando las entregas de salida correspondientes.",uso:"Corridas diarias o por turno para no dejar pedidos vencidos sin entregar.",custom:false},
+  {code:"VL06O",nombre:"Monitor de Salidas (Outbound)",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Monitor",proposito:"Panel de trabajo central para gestionar entregas de salida pendientes de picking, packing o expedición.",uso:"Herramienta diaria del supervisor de despacho; permite ejecutar acciones masivas.",custom:false},
+  {code:"VL06P",nombre:"Listado de Entregas para Picking",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Monitor",proposito:"Filtra las entregas de salida que están pendientes específicamente de la etapa de picking.",uso:"Asignación de tareas al equipo de picking, priorizando por ruta o ventana de despacho.",custom:false},
+  {code:"VL06G",nombre:"Listado de Entregas para Salida de Mercancías",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Monitor",proposito:"Filtra las entregas ya preparadas (picking completo) que están listas para contabilizar la salida (PGI).",uso:"Último control antes de liberar el camión; checklist final del equipo de expedición.",custom:false},
+  {code:"VL09",nombre:"Anular Salida de Mercancías (PGI)",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Revierte el Posteo de Salida de Mercancías (PGI) de una entrega ya confirmada.",uso:"Cuando se contabilizó la salida por error o el envío se cancela después del PGI.",custom:false},
+  {code:"VL10A",nombre:"Entregas de Salida desde Pedidos",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Crea entregas de salida de forma colectiva para múltiples pedidos seleccionados.",uso:"Procesamiento masivo en picos de demanda; ideal para cierres de jornada.",custom:false},
+  {code:"VL10B",nombre:"Entregas de Salida (Órdenes de Traslado)",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Crea entregas de salida para órdenes de traslado entre plantas o centros.",uso:"Despachos internos o replenishment de sucursales.",custom:false},
+  {code:"VL22",nombre:"Listado de Entregas de Salida",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Reporte",proposito:"Reporte de entregas de salida filtrable por rango de fechas, cliente, ruta y estado.",uso:"Control y seguimiento del flujo de despacho.",custom:false},
+  {code:"VLPOD",nombre:"Confirmar Prueba de Entrega (POD)",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Confirmación",proposito:"Registra la confirmación de entrega al cliente (Proof of Delivery), incluyendo diferencias si las hubo.",uso:"Cierre del ciclo de transporte cuando el cliente firma la recepción; habilita la facturación final si aplica.",custom:false},
+  {code:"VL70",nombre:"Monitor de Transporte / Expedición",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Monitor",proposito:"Gestiona y visualiza las expediciones asociadas a las entregas de salida.",uso:"Control de flota, asignación de transportistas y confirmación de despacho.",custom:false},
+  {code:"VT01N",nombre:"Crear Expedición",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Crea un documento de expedición para agrupar entregas en un mismo envío físico.",uso:"Cuando varias entregas comparten transportista, ruta y fecha de salida.",custom:false},
+  {code:"VT02N",nombre:"Modificar Expedición",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Edita una expedición existente: agregar/quitar entregas, cambiar datos de transporte.",uso:"Ajustes de último momento en la carga antes del cierre.",custom:false},
+  {code:"VT03N",nombre:"Visualizar Expedición",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Consulta",proposito:"Consulta de solo lectura de una expedición: entregas asignadas, transportista, estado.",uso:"Trazabilidad de envíos y soporte para consultas de transporte.",custom:false},
+  {code:"VT04",nombre:"Listado de Expediciones",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Reporte",proposito:"Reporte de expediciones filtrable por transportista, ruta, fecha y estado.",uso:"Seguimiento gerencial del volumen y desempeño de transporte.",custom:false},
+  {code:"VT12N",nombre:"Expedición Colectiva",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Procesa varias expediciones en paralelo: check-in, carga, cierre y contabilización.",uso:"Operaciones de gran volumen para agilizar el despacho masivo.",custom:false},
+  {code:"VI01",nombre:"Crear Costos de Transporte",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Genera el documento de costos de flete asociado a una expedición, para su posterior liquidación.",uso:"Cuando el transportista factura por envío y se necesita registrar el costo logístico en SAP.",custom:false},
+  {code:"VI02",nombre:"Modificar Costos de Transporte",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Ejecución",proposito:"Edita un documento de costos de transporte existente: tarifas, recargos, datos de liquidación.",uso:"Ajustes antes de liquidar el costo al proveedor de transporte.",custom:false},
+  {code:"VI03",nombre:"Visualizar Costos de Transporte",modulo:"LE",seccion:"Despacho / Outbound",tipo:"Consulta",proposito:"Consulta de solo lectura de un documento de costos de flete.",uso:"Verificación y auditoría de costos logísticos antes del pago al transportista.",custom:false},
+  {code:"VA01",nombre:"Crear Pedido de Cliente",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Registra un nuevo pedido de venta con datos del cliente, materiales, cantidades, precios y condiciones.",uso:"Punto de entrada del proceso Order-to-Cash; toda venta comienza aquí.",custom:false},
+  {code:"VA02",nombre:"Modificar Pedido de Cliente",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Permite editar un pedido existente: cambiar cantidades, fechas de entrega, condiciones de pago.",uso:"Atención de cambios solicitados por el cliente antes de la entrega.",custom:false},
+  {code:"VA03",nombre:"Visualizar Pedido de Cliente",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Consulta",proposito:"Consulta de solo lectura de un pedido de cliente con todos sus datos y estado de proceso.",uso:"Consultas de atención al cliente, auditoría y trazabilidad.",custom:false},
+  {code:"VA05",nombre:"Listado de Pedidos de Cliente",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Reporte",proposito:"Reporte de pedidos de venta filtrable por cliente, material, fecha, organización de ventas.",uso:"Seguimiento de cartera de pedidos abiertos o históricos.",custom:false},
+  {code:"VA11",nombre:"Crear Consulta / Solicitud de Oferta",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Registra una consulta (inquiry) del cliente, previa a la cotización formal.",uso:"Primer contacto comercial cuando el cliente solo pide información de precios o disponibilidad, sin comprometerse aún.",custom:false},
+  {code:"VA21",nombre:"Crear Oferta / Cotización",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Genera una cotización formal con precios y condiciones válidas por un período determinado.",uso:"Cuando el cliente solicita una propuesta comercial antes de confirmar el pedido.",custom:false},
+  {code:"VA22",nombre:"Modificar Oferta",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Edita una cotización existente: precios, cantidades, validez.",uso:"Renegociación de condiciones antes de que el cliente acepte la oferta.",custom:false},
+  {code:"VA23",nombre:"Visualizar Oferta",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Consulta",proposito:"Consulta de solo lectura de una cotización.",uso:"Seguimiento comercial y verificación de condiciones ofrecidas.",custom:false},
+  {code:"VA41",nombre:"Crear Contrato Marco",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Crea contratos de largo plazo con condiciones predefinidas (precio, cantidad, descuentos).",uso:"Clientes con volumen asegurado y condiciones comerciales fijas por período.",custom:false},
+  {code:"VA42",nombre:"Modificar Contrato Marco",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Edita un contrato marco existente: vigencia, condiciones, cantidades acumuladas.",uso:"Renovaciones o ajustes de condiciones comerciales de largo plazo.",custom:false},
+  {code:"VA43",nombre:"Visualizar Contrato Marco",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Consulta",proposito:"Consulta de solo lectura de un contrato marco.",uso:"Verificación de condiciones vigentes antes de procesar un pedido bajo contrato.",custom:false},
+  {code:"VA14",nombre:"Listado de Pedidos Bloqueados",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Monitor",proposito:"Muestra pedidos bloqueados por crédito, precio o datos incompletos.",uso:"Gestión diaria de liberaciones; evita demoras en el despacho.",custom:false},
+  {code:"VF01",nombre:"Crear Factura",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Genera la factura de cliente a partir de una o varias entregas de salida.",uso:"Cierre del ciclo de venta; requisito para registro contable y cobro.",custom:false},
+  {code:"VF02",nombre:"Modificar Factura",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Permite editar datos de una factura ya creada antes de su contabilización definitiva.",uso:"Correcciones administrativas previas al cierre contable de la factura.",custom:false},
+  {code:"VF03",nombre:"Visualizar Factura",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Consulta",proposito:"Consulta de solo lectura de una factura de cliente.",uso:"Atención al cliente, auditoría y conciliación con cobranzas.",custom:false},
+  {code:"VF04",nombre:"Facturación Colectiva",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Procesa múltiples facturas en bloque a partir de entregas pendientes de facturar.",uso:"Cierre del día o del período; maximiza eficiencia del equipo de facturación.",custom:false},
+  {code:"VF11",nombre:"Anular Factura",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Genera la nota de anulación (cancelación) de una factura ya contabilizada.",uso:"Corrección de errores de facturación o devoluciones acordadas con el cliente.",custom:false},
+  {code:"VF44",nombre:"Listado de Facturas Bloqueadas",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Monitor",proposito:"Muestra facturas en estado de bloqueo pendientes de liberación.",uso:"Control de gestión de facturación; evita retrasos en el cobro.",custom:false},
+  {code:"VKM1",nombre:"Pedidos Bloqueados por Crédito",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Monitor",proposito:"Lista pedidos retenidos por límite de crédito del cliente excedido.",uso:"Revisión y liberación diaria por parte de crédito y cobranzas.",custom:false},
+  {code:"VKM3",nombre:"Liberar Pedido de Crédito",modulo:"SD",seccion:"Pedidos (SD)",tipo:"Ejecución",proposito:"Libera pedidos bloqueados por crédito una vez aprobada la excepción.",uso:"Proceso de autorización de crédito para habilitar el despacho.",custom:false},
+  {code:"ME21N",nombre:"Crear Orden de Compra",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Genera una orden de compra formal a un proveedor con materiales, cantidades, precios y condiciones.",uso:"Inicio del proceso Procure-to-Pay; reemplaza solicitudes de pedido aprobadas.",custom:false},
+  {code:"ME22N",nombre:"Modificar Orden de Compra",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Edita una OC existente: cambiar cantidades, fechas, precios o condiciones.",uso:"Ajustes negociados con el proveedor antes de la entrega.",custom:false},
+  {code:"ME23N",nombre:"Visualizar Orden de Compra",modulo:"MM",seccion:"Compras (MM)",tipo:"Consulta",proposito:"Consulta de solo lectura de una OC con todos sus datos y estado.",uso:"Seguimiento de entregas de proveedor, auditoría y conciliación.",custom:false},
+  {code:"ME28",nombre:"Liberar Orden de Compra",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Ejecuta la liberación (aprobación) formal de una OC sujeta a estrategia de liberación.",uso:"Cuando la OC supera un monto que requiere aprobación jerárquica antes de enviarse al proveedor.",custom:false},
+  {code:"ME29N",nombre:"Liberación Individual de OC",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Libera una orden de compra puntual desde una pantalla simplificada de un solo documento.",uso:"Aprobaciones rápidas de OCs individuales por parte del responsable designado.",custom:false},
+  {code:"ME2N",nombre:"Listado de OC por Número de Documento",modulo:"MM",seccion:"Compras (MM)",tipo:"Reporte",proposito:"Reporte de órdenes de compra filtradas por rango de números de documento.",uso:"Búsqueda rápida y seguimiento puntual de órdenes específicas.",custom:false},
+  {code:"ME2L",nombre:"Listado de OC por Proveedor",modulo:"MM",seccion:"Compras (MM)",tipo:"Reporte",proposito:"Reporte de órdenes de compra agrupadas y filtradas por proveedor.",uso:"Análisis de volumen de compra y seguimiento de entregas pendientes por proveedor.",custom:false},
+  {code:"ME2M",nombre:"Listado de OC por Material",modulo:"MM",seccion:"Compras (MM)",tipo:"Reporte",proposito:"Reporte de órdenes de compra filtradas por material y período.",uso:"Control de aprovisionamiento y seguimiento de entregas pendientes.",custom:false},
+  {code:"ME51N",nombre:"Crear Solicitud de Pedido",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Registra una requisición interna de material o servicio antes de generar una OC.",uso:"Punto de inicio del proceso de compra; puede dispararse automáticamente por MRP.",custom:false},
+  {code:"ME52N",nombre:"Modificar Solicitud de Pedido",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Edita una solicitud de pedido existente: cantidades, fechas, datos de cuenta.",uso:"Ajustes antes de convertir la requisición en orden de compra.",custom:false},
+  {code:"ME53N",nombre:"Visualizar Solicitud de Pedido",modulo:"MM",seccion:"Compras (MM)",tipo:"Consulta",proposito:"Consulta de solo lectura de una solicitud de pedido.",uso:"Verificación de estado y datos antes de su asignación a un proveedor.",custom:false},
+  {code:"ME57",nombre:"Asignar Solicitudes de Pedido",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Convierte solicitudes de pedido en órdenes de compra de forma individual o masiva.",uso:"Gestión del equipo de compras para procesar las requisiciones aprobadas.",custom:false},
+  {code:"ME59N",nombre:"Generación Automática de Órdenes de Compra",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Convierte automáticamente solicitudes de pedido aprobadas en órdenes de compra, según fuentes de suministro fijas.",uso:"Compras repetitivas o de bajo valor donde no se requiere negociación manual por orden.",custom:false},
+  {code:"ME5A",nombre:"Listado de Solicitudes de Pedido",modulo:"MM",seccion:"Compras (MM)",tipo:"Reporte",proposito:"Reporte de solicitudes de pedido por estado (abiertas, en proceso, cerradas).",uso:"Seguimiento del backlog de compras y control de aprobaciones.",custom:false},
+  {code:"ME9F",nombre:"Salida de Mensajes de Órdenes de Compra",modulo:"MM",seccion:"Compras (MM)",tipo:"Ejecución",proposito:"Reenvía o reimprime el mensaje/output de una orden de compra hacia el proveedor.",uso:"Cuando el proveedor no recibió la OC original o se requiere reenviar tras una modificación.",custom:false},
+  {code:"MM01",nombre:"Crear Material",modulo:"MM",seccion:"Datos Maestros",tipo:"Ejecución",proposito:"Crea el registro maestro de un material nuevo con todos sus datos (básicos, compras, ventas, almacén).",uso:"Alta de nuevos productos; debe completarse antes de cualquier movimiento.",custom:false},
+  {code:"MM02",nombre:"Modificar Material",modulo:"MM",seccion:"Datos Maestros",tipo:"Ejecución",proposito:"Edita datos de un material existente en las vistas requeridas.",uso:"Actualización de precios, datos de almacenamiento, unidades de medida, textos.",custom:false},
+  {code:"MM03",nombre:"Visualizar Material",modulo:"MM",seccion:"Datos Maestros",tipo:"Consulta",proposito:"Consulta de solo lectura del registro maestro de un material.",uso:"Verificación de datos maestros, consultas de atención al cliente.",custom:false},
+  {code:"MM06",nombre:"Marcar Material para Borrado",modulo:"MM",seccion:"Datos Maestros",tipo:"Ejecución",proposito:"Marca un material para eliminación a nivel general, de planta o de almacén.",uso:"Discontinuación de productos obsoletos, evitando que se sigan generando nuevos movimientos.",custom:false},
+  {code:"MM60",nombre:"Análisis de Consumos",modulo:"MM",seccion:"Datos Maestros",tipo:"Reporte",proposito:"Reporte histórico de consumos de materiales por período, planta y almacén.",uso:"Planeación de reposición, análisis ABC, definición de puntos de pedido.",custom:false},
+  {code:"MMBE",nombre:"Vista General de Stocks",modulo:"MM",seccion:"Datos Maestros",tipo:"Consulta",proposito:"Visualiza el stock de un material en todos los niveles (planta, almacén, lote, ubicación).",uso:"Consulta operativa rápida de disponibilidad antes de confirmar pedidos.",custom:false},
+  {code:"MB5B",nombre:"Stocks en Fecha de Clave",modulo:"MM",seccion:"Datos Maestros",tipo:"Reporte",proposito:"Muestra el stock de materiales en una fecha pasada específica.",uso:"Conciliación contable al cierre de período, reconstrucción de inventarios históricos.",custom:false},
+  {code:"MSC1N",nombre:"Crear Lote (Batch)",modulo:"MM",seccion:"Datos Maestros",tipo:"Master Data",proposito:"Crea el registro maestro de un lote para un material gestionado por lotes.",uso:"Alta de un nuevo lote de producción o de recepción que requiere trazabilidad individual.",custom:false},
+  {code:"MSC2N",nombre:"Modificar Lote",modulo:"MM",seccion:"Datos Maestros",tipo:"Master Data",proposito:"Edita datos del lote: fecha de vencimiento, estado de calidad, textos.",uso:"Actualización de vida útil o estado del lote durante su ciclo de vida en almacén.",custom:false},
+  {code:"MSC3N",nombre:"Visualizar Lote",modulo:"MM",seccion:"Datos Maestros",tipo:"Consulta",proposito:"Consulta de solo lectura de los datos maestros de un lote.",uso:"Trazabilidad de lote ante reclamos de calidad o vencimientos próximos.",custom:false},
+  {code:"XD01",nombre:"Crear Cliente (Centralizado)",modulo:"SD",seccion:"Datos Maestros",tipo:"Master Data",proposito:"Crea el registro maestro de un cliente incluyendo datos generales, de ventas y de la sociedad.",uso:"Alta de nuevos clientes antes de poder registrarles un pedido de venta.",custom:false},
+  {code:"XD02",nombre:"Modificar Cliente",modulo:"SD",seccion:"Datos Maestros",tipo:"Master Data",proposito:"Edita datos de un cliente existente: direcciones, condiciones de pago, datos de ventas.",uso:"Actualización de información comercial o logística del cliente.",custom:false},
+  {code:"XD03",nombre:"Visualizar Cliente",modulo:"SD",seccion:"Datos Maestros",tipo:"Consulta",proposito:"Consulta de solo lectura del registro maestro de un cliente.",uso:"Verificación de datos antes de procesar pedidos o entregas.",custom:false},
+  {code:"XK01",nombre:"Crear Proveedor",modulo:"MM",seccion:"Datos Maestros",tipo:"Master Data",proposito:"Crea el registro maestro de un proveedor incluyendo datos generales, de compras y contables.",uso:"Alta de nuevos proveedores antes de poder emitirles una orden de compra.",custom:false},
+  {code:"XK02",nombre:"Modificar Proveedor",modulo:"MM",seccion:"Datos Maestros",tipo:"Master Data",proposito:"Edita datos de un proveedor existente: direcciones, condiciones de pago, datos bancarios.",uso:"Actualización de información comercial o de contacto del proveedor.",custom:false},
+  {code:"XK03",nombre:"Visualizar Proveedor",modulo:"MM",seccion:"Datos Maestros",tipo:"Consulta",proposito:"Consulta de solo lectura del registro maestro de un proveedor.",uso:"Verificación de datos antes de emitir una orden de compra.",custom:false},
+];
+
+// ── STATE ──────────────────────────────────────────────────────────
+let DATA = JSON.parse(localStorage.getItem('sap_custom') || '[]');
+let allData = [...BASE_DATA, ...DATA];
+let activeMod = 'ALL', activeSec = null, activeTipo = null;
+let sortCol = 'code', sortDir = 1, expandedRow = null;
+const searchInput = document.getElementById('searchInput');
+
+function saveCustom() {
+  DATA = allData.filter(r => r.custom);
+  localStorage.setItem('sap_custom', JSON.stringify(DATA));
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function hl(text, q) {
+  if (!q) return esc(text);
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return esc(text).replace(re, '<mark>$1</mark>');
+}
+function modClass(m) {
+  if (m==='WM') return 'WM'; if (m==='MM') return 'MM';
+  if (m==='SD') return 'SD'; if (m==='LE') return 'LE'; return 'MIX';
+}
+function tipoClass(t) {
+  const map = {'Ejecución':'Ejecución','Consulta':'Consulta','Reporte':'Reporte','Monitor':'Monitor',
+    'Inventario':'Inventario','Confirmación':'Confirmación','Master Data':'MasterData','Config.':'Config','Personalizada':'Custom'};
+  return map[t] || 'Custom';
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── FILTER & SORT ──────────────────────────────────────────────────
+function filtered() {
+  const q = searchInput.value.toLowerCase().trim();
+  return allData.filter(r => {
+    const mm = r.modulo || '';
+    const mok = activeMod === 'ALL' || mm === activeMod || mm.includes(activeMod);
+    const sok = !activeSec || r.seccion === activeSec;
+    const tok = !activeTipo || r.tipo === activeTipo;
+    const qok = !q || [r.code,r.nombre,r.proposito,r.uso,r.seccion,r.tipo].some(f => (f||'').toLowerCase().includes(q));
+    return mok && sok && tok && qok;
+  }).sort((a,b) => {
+    const av = (a[sortCol]||'').toLowerCase(), bv = (b[sortCol]||'').toLowerCase();
+    return av.localeCompare(bv, 'es') * sortDir;
+  });
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────
+function render() {
+  const q = searchInput.value.toLowerCase().trim();
+  const rows = filtered();
+  document.getElementById('countShown').textContent = rows.length;
+  document.getElementById('countTotal').textContent = allData.length;
+  document.getElementById('statTotal').textContent = allData.length;
+  document.getElementById('statCustom').textContent = allData.filter(r=>r.custom).length;
+
+  // Sidebar counts
+  ['WM','MM','SD','LE'].forEach(m => {
+    const el = document.getElementById('nc-'+m);
+    if (el) el.textContent = allData.filter(r=>(r.modulo||'').includes(m)).length;
+  });
+  document.getElementById('nc-ALL').textContent = allData.length;
+
+  // Active chips display
+  const chips = document.getElementById('chipsRow');
+  chips.innerHTML = '';
+  if (activeMod !== 'ALL') chips.innerHTML += `<span class="chip on ${activeMod.toLowerCase()}" onclick="setMod('ALL',null)"><span class="chip-dot" style="background:currentColor"></span>Módulo: ${activeMod} ×</span>`;
+  if (activeSec) chips.innerHTML += `<span class="chip on tipo" onclick="setSec(null,null)">Sección: ${activeSec} ×</span>`;
+  if (activeTipo) chips.innerHTML += `<span class="chip on tipo" onclick="setTipo(null,null)">Tipo: ${activeTipo} ×</span>`;
+  if (q) chips.innerHTML += `<span class="chip on tipo" onclick="searchInput.value='';render()">"${q}" ×</span>`;
+
+  const body = document.getElementById('txBody');
+  body.innerHTML = '';
+
+  if (!rows.length) {
+    body.innerHTML = `<tr><td colspan="7"><div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6M11 8v6"/></svg>
+      <p>Sin resultados. Intentá con otros filtros.</p>
+    </div></td></tr>`;
+    return;
+  }
+
+  let lastSec = null;
+  rows.forEach(r => {
+    const isOpen = expandedRow === r.code;
+    if (sortCol === 'seccion' && r.seccion !== lastSec) {
+      lastSec = r.seccion;
+      const gr = document.createElement('tr');
+      gr.className = 'group-row';
+      gr.innerHTML = `<td colspan="7">${esc(r.seccion)}</td>`;
+      body.appendChild(gr);
+    }
+    const tr = document.createElement('tr');
+    tr.className = 'data-row' + (isOpen ? ' expanded' : '');
+    tr.innerHTML = `
+      <td style="padding:8px 6px 8px 14px">
+        <button class="expand-btn${isOpen?' open':''}" title="Ver detalle">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 10,8 6,12"/></svg>
+        </button>
+      </td>
+      <td><span class="code-pill${r.custom?' custom':''}">${hl(r.code,q)}</span></td>
+      <td style="font-weight:400">${hl(r.nombre,q)}</td>
+      <td><span class="mod-badge mod-${modClass(r.modulo)}">${esc(r.modulo)}</span></td>
+      <td style="color:var(--text2);font-size:12px">${hl(r.seccion,q)}</td>
+      <td><span class="tipo-badge tipo-${tipoClass(r.tipo)}">${esc(r.tipo)}</span></td>
+      <td style="padding:8px 10px">
+        ${r.custom ? `<button class="btn" style="padding:3px 10px;font-size:11px" onclick="deleteRow('${r.code}',event)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="12" height="12"><polyline points="2,4 14,4"/><path d="M5,4V2h6v2"/><path d="M3,4l1,10h8l1-10"/></svg>
+        </button>` : ''}
+      </td>
+    `;
+    tr.querySelector('.expand-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      expandedRow = isOpen ? null : r.code;
+      render();
+    });
+    tr.addEventListener('click', () => { expandedRow = isOpen ? null : r.code; render(); });
+    body.appendChild(tr);
+
+    if (isOpen) {
+      const det = document.createElement('tr');
+      det.className = 'detail-row';
+      det.innerHTML = `<td colspan="7"><div class="detail-inner">
+        <div class="detail-block">
+          <span class="detail-label">Propósito</span>
+          <span class="detail-text">${hl(r.proposito||'—',q)}</span>
+        </div>
+        <div class="detail-block">
+          <span class="detail-label">Cuándo usarla</span>
+          <span class="detail-text">${hl(r.uso||'—',q)}</span>
+        </div>
+      </div></td>`;
+      body.appendChild(det);
+    }
+  });
+}
+
+// ── FILTER SETTERS ─────────────────────────────────────────────────
+function setMod(m, el) {
+  activeMod = m; activeSec = null; activeTipo = null;
+  document.querySelectorAll('.nav-item[data-mod]').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item[data-sec]').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item[data-tipo]').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  expandedRow = null; render();
+}
+function setSec(s, el) {
+  activeSec = s; activeMod = 'ALL'; activeTipo = null;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  expandedRow = null; render();
+}
+function setTipo(t, el) {
+  activeTipo = t; activeSec = null;
+  document.querySelectorAll('.nav-item[data-tipo]').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  expandedRow = null; render();
+}
+
+// ── SORTING ────────────────────────────────────────────────────────
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+    document.querySelectorAll('th[data-col]').forEach(t => { t.classList.remove('sorted'); t.querySelector('.si').textContent = '↕'; });
+    th.classList.add('sorted');
+    th.querySelector('.si').textContent = sortDir === 1 ? '↑' : '↓';
+    expandedRow = null; render();
+  });
+});
+
+// ── SEARCH ────────────────────────────────────────────────────────
+searchInput.addEventListener('input', () => { expandedRow = null; render(); });
+
+document.getElementById('clearFilters').addEventListener('click', () => {
+  activeMod = 'ALL'; activeSec = null; activeTipo = null;
+  searchInput.value = '';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('.nav-item[data-mod="ALL"]').classList.add('active');
+  expandedRow = null; render();
+});
+
+// ── ADD MODAL ─────────────────────────────────────────────────────
+function openModal() { document.getElementById('addModal').classList.add('open'); }
+function closeModal() {
+  document.getElementById('addModal').classList.remove('open');
+  ['code','nombre','proposito','uso'].forEach(f => document.getElementById('f-'+f).value = '');
+}
+document.getElementById('openAddModal').addEventListener('click', openModal);
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('cancelModal').addEventListener('click', closeModal);
+document.getElementById('addModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+document.getElementById('saveModal').addEventListener('click', () => {
+  const code = document.getElementById('f-code').value.trim().toUpperCase();
+  const nombre = document.getElementById('f-nombre').value.trim();
+  if (!code || !nombre) { showToast('⚠ Código y nombre son obligatorios.'); return; }
+  if (allData.find(r => r.code === code)) { showToast('Ya existe una transacción con ese código.'); return; }
+  const newRow = {
+    code, nombre,
+    modulo: document.getElementById('f-modulo').value,
+    seccion: document.getElementById('f-seccion').value,
+    tipo: document.getElementById('f-tipo').value,
+    proposito: document.getElementById('f-proposito').value.trim(),
+    uso: document.getElementById('f-uso').value.trim(),
+    custom: true
+  };
+  allData.push(newRow);
+  saveCustom();
+  closeModal();
+  showToast('Transacción ' + code + ' agregada correctamente.');
+  expandedRow = code; render();
+});
+
+// ── DELETE ────────────────────────────────────────────────────────
+function deleteRow(code, e) {
+  e.stopPropagation();
+  if (!confirm(`¿Eliminar la transacción ${code}?`)) return;
+  allData = allData.filter(r => r.code !== code);
+  saveCustom();
+  if (expandedRow === code) expandedRow = null;
+  showToast('Transacción ' + code + ' eliminada.');
+  render();
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const custom = allData.filter(r => r.custom);
+  if (!custom.length) { showToast('No hay transacciones personalizadas para exportar.'); return; }
+  const blob = new Blob([JSON.stringify(custom, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'mis_transacciones_sap.json'; a.click();
+  showToast('Exportadas ' + custom.length + ' transacciones personalizadas.');
+});
+
+// ── INIT ──────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
